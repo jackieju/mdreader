@@ -148,6 +148,36 @@
     zoom = applyZoom(next);
   }
 
+  const WIDTH_KEY = "mdreader.width";
+  const WIDTH_MIN = 400;
+  const WIDTH_MAX = 2000;
+  const WIDTH_STEP = 60;
+  const WIDTH_BASE = 900;
+
+  function clampWidth(w) {
+    return Math.min(WIDTH_MAX, Math.max(WIDTH_MIN, w));
+  }
+
+  function readWidth() {
+    const v = parseFloat(localStorage.getItem(WIDTH_KEY));
+    return Number.isFinite(v) ? clampWidth(v) : WIDTH_BASE;
+  }
+
+  function applyWidth(w) {
+    const clamped = clampWidth(w);
+    document.documentElement.style.setProperty("--content-max-width", clamped + "px");
+    try {
+      localStorage.setItem(WIDTH_KEY, String(clamped));
+    } catch (_) {}
+    return clamped;
+  }
+
+  let width = applyWidth(readWidth());
+
+  function setWidth(next) {
+    width = applyWidth(next);
+  }
+
   window.addEventListener("keydown", (e) => {
     if (!(e.metaKey && e.shiftKey)) return;
     const k = e.key;
@@ -160,8 +190,62 @@
     } else if (k === "0" || e.code === "Digit0") {
       e.preventDefault();
       setZoom(1.0);
+    } else if (k === "." || k === ">" || e.code === "Period") {
+      e.preventDefault();
+      setWidth(width + WIDTH_STEP);
+    } else if (k === "," || k === "<" || e.code === "Comma") {
+      e.preventDefault();
+      setWidth(width - WIDTH_STEP);
     }
   });
+
+  function isMobile() {
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
+  }
+
+  async function pickAndOpen() {
+    // iOS: picked path is security-scoped; read_md cannot re-open it after the
+    // picker scope closes. open_md_dialog picks+reads in-scope, emits md-loaded.
+    if (isMobile()) {
+      try {
+        await window.__TAURI__.core.invoke("open_md_dialog");
+      } catch (e) {
+        showError(String(e));
+      }
+      return;
+    }
+
+    const dialog = window.__TAURI__ && window.__TAURI__.dialog;
+    if (!dialog || !dialog.open) {
+      showError("File picker unavailable.");
+      return;
+    }
+    try {
+      const selected = await dialog.open({
+        multiple: false,
+        directory: false,
+        filters: [
+          { name: "Markdown", extensions: ["md", "markdown", "mdown", "mkd", "txt"] },
+        ],
+      });
+      const path = Array.isArray(selected) ? selected[0] : selected;
+      if (path) loadPath(path);
+    } catch (e) {
+      showError(String(e));
+    }
+  }
+
+  function bind(id, fn) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("click", fn);
+  }
+
+  bind("btnOpen", pickAndOpen);
+  bind("btnZoomOut", () => setZoom(zoom - ZOOM_STEP));
+  bind("btnZoomIn", () => setZoom(zoom + ZOOM_STEP));
+  bind("btnZoomReset", () => setZoom(1.0));
+  bind("btnWidthDown", () => setWidth(width - WIDTH_STEP));
+  bind("btnWidthUp", () => setWidth(width + WIDTH_STEP));
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", wire);

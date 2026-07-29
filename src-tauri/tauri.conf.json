@@ -2,7 +2,7 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "MD Reader",
   "version": "0.1.0",
-  "identifier": "com.mdreader.desktop",
+  "identifier": "com.joycom.mdreader",
   "build": {
     "frontendDist": "../dist"
   },
@@ -37,7 +37,7 @@
         "name": "Markdown Document",
         "description": "Markdown text document",
         "role": "Viewer",
-        "rank": "Alternate"
+        "rank": "Owner"
       }
     ]
   },

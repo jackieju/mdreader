@@ -13,6 +13,7 @@
   --hr: #6d6d6d;
   --muted: #000000;
   --mono: "SF Mono", "SFMono-Regular", Menlo, Monaco, monospace;
+  --content-max-width: 900px;
 }
 
 * { box-sizing: border-box; }
@@ -42,7 +43,7 @@ body {
 
 .markdown-body {
   width: 100%;
-  max-width: 900px;
+  max-width: var(--content-max-width);
   font-family: var(--mono);
   font-size: 1rem;
   line-height: 1.5;
@@ -204,3 +205,41 @@ body {
 }
 
 .drop-overlay.visible { display: flex; }
+
+#toolbar {
+  position: fixed;
+  right: env(safe-area-inset-right, 12px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  z-index: 10000;
+  opacity: 0.9;
+}
+
+#toolbar button {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#toolbar button:active { opacity: 0.6; }
+
+#toolbar .sep {
+  width: 1px;
+  background: var(--border);
+  margin: 4px 2px;
+}

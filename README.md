@@ -6,6 +6,8 @@ Native macOS markdown reader built with Tauri v2 (pure Rust backend, static HTML
 
 - Native **File > Open** (⌘O) — opens any `.md` / `.markdown` / `.mdown` / `.mkd` / `.txt` file.
 - Drag-and-drop a markdown file onto the window to open it.
+- **Zoom** the text: ⌘⇧= (larger), ⌘⇧- (smaller), ⌘⇧0 (reset). Persisted across launches.
+- **Adjust content width** (characters per line): ⌘⇧. (wider), ⌘⇧, (narrower). Persisted across launches.
 - Full monospace grid look (everything SF Mono / Menlo).
 - Syntax highlighting with the exact opencode syntax palette.
 - Fully offline: `marked` and `highlight.js` are vendored under `dist/vendor/`.

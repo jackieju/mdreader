@@ -5,6 +5,10 @@ edition = "2021"
 description = "MD Reader — Tauri v2 markdown viewer with terminal-match theme"
 authors = ["mdreader"]
 
+[lib]
+name = "mdreader_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
 [[bin]]
 name = "mdreader"
 path = "src/main.rs"
