@@ -1,0 +1,12 @@
+# Rust / Tauri build output
+/src-tauri/target/
+
+# Tauri generated schemas (regenerated on build)
+/src-tauri/gen/schemas/
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*~
