@@ -48,6 +48,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: var(--text);
+  -webkit-touch-callout: none;
 }
 
 .markdown-body h1,
@@ -242,4 +243,204 @@ body {
   width: 1px;
   background: var(--border);
   margin: 4px 2px;
+}
+
+.anno-dot {
+  display: inline-block;
+  vertical-align: super;
+  font-size: 0.6em;
+  line-height: 0;
+  color: #c1121f;
+  cursor: pointer;
+  padding: 0 1px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.anno-dot::before { content: "\25CF"; } /* ● */
+
+.anno-dot:active { opacity: 0.6; }
+
+#annoMenu {
+  position: fixed;
+  display: none;
+  z-index: 10001;
+  flex-direction: row;
+  gap: 0;
+  background: #1c1c1c;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#annoMenu.visible { display: flex; }
+
+#annoMenu button {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  border-right: 1px solid #3a3a3a;
+  padding: 10px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#annoMenu button:last-child { border-right: none; }
+#annoMenu button:active { background: #333333; }
+
+#annoOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 10002;
+  padding: 20px;
+}
+
+#annoOverlay.visible { display: flex; }
+
+#annoDialog {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  font-family: var(--mono);
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+#annoDialog .anno-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin: 0 0 4px;
+}
+
+#annoDialog .anno-loc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0.75;
+  margin: 0 0 4px;
+  word-break: break-all;
+}
+
+#annoDialog .anno-quote {
+  font-size: 0.85rem;
+  color: var(--code);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin: 0 0 10px;
+  max-height: 4.5em;
+  overflow: auto;
+  word-break: break-word;
+}
+
+#annoDialog textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0 0 12px;
+  box-sizing: border-box;
+}
+
+#annoDialog .anno-view-text {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0 0 12px;
+  min-height: 40px;
+}
+
+#annoDialog .anno-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+#annoDialog .anno-actions button {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 56px;
+  height: 38px;
+  padding: 0 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#annoDialog .anno-actions button:active { opacity: 0.6; }
+
+#annoDialog .anno-actions button.primary {
+  color: #ffffff;
+  background: var(--link);
+}
+
+#annoDialog .anno-actions button.danger {
+  color: #ffffff;
+  background: #c1121f;
+}
+
+#annoDialog .anno-actions button.spacer { margin-right: auto; }
+
+/* Non-destructive toast (export confirmation) */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%) translateY(8px);
+  max-width: 86vw;
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #000000;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 9999;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

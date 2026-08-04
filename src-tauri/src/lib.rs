@@ -27,6 +27,41 @@ fn drain_pending(state: tauri::State<'_, PendingOpen>) -> Vec<String> {
     q.drain(..).map(|p| p.to_string_lossy().to_string()).collect()
 }
 
+#[cfg(desktop)]
+#[tauri::command]
+fn export_annotations(src_path: String, filename: String, content: String) -> Result<String, String> {
+    let src = PathBuf::from(&src_path);
+    let dir = src
+        .parent()
+        .map(|p| p.to_path_buf())
+        .unwrap_or_else(|| PathBuf::from("."));
+    let out = dir.join(&filename);
+    std::fs::write(&out, content.as_bytes())
+        .map_err(|e| format!("failed to write {}: {}", out.display(), e))?;
+    Ok(out.to_string_lossy().to_string())
+}
+
+// Mobile: the source path is security-scoped and its directory is not writable,
+// so write into the app document directory (always writable) and return that
+// path for the frontend to surface to the user.
+#[cfg(mobile)]
+#[tauri::command]
+fn export_annotations(
+    app: AppHandle,
+    _src_path: String,
+    filename: String,
+    content: String,
+) -> Result<String, String> {
+    let dir = app
+        .path()
+        .document_dir()
+        .map_err(|e| format!("no document dir: {}", e))?;
+    let out = dir.join(&filename);
+    std::fs::write(&out, content.as_bytes())
+        .map_err(|e| format!("failed to write {}: {}", out.display(), e))?;
+    Ok(out.to_string_lossy().to_string())
+}
+
 #[cfg(mobile)]
 #[tauri::command]
 fn open_md_dialog(app: AppHandle) {
@@ -119,10 +154,15 @@ pub fn run() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         read_md,
         drain_pending,
-        open_md_dialog
+        open_md_dialog,
+        export_annotations
     ]);
     #[cfg(desktop)]
-    let builder = builder.invoke_handler(tauri::generate_handler![read_md, drain_pending]);
+    let builder = builder.invoke_handler(tauri::generate_handler![
+        read_md,
+        drain_pending,
+        export_annotations
+    ]);
 
     #[cfg(desktop)]
     let builder = builder.setup(|app| {

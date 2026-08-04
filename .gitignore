@@ -10,3 +10,17 @@
 # Editor
 *.swp
 *~
+
+# Signing secrets / App Store Connect credentials — NEVER commit
+/.asc-certs/
+*.p12
+*.key
+*.mobileprovision
+*.provisionprofile
+/src-tauri/embedded.provisionprofile
+/src-tauri/entitlements.mac.plist
+
+# Local scratch / build artifacts
+/demo.md
+/dist/_render_ipad.html
+/screenshots/

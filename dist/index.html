@@ -16,6 +16,25 @@
       </article>
     </main>
     <div id="dropOverlay" class="drop-overlay">Drop to open</div>
+    <div id="annoMenu">
+      <button id="annoMenuAdd" type="button">注释</button>
+      <button id="annoMenuCopy" type="button">拷贝</button>
+    </div>
+    <div id="annoOverlay">
+      <div id="annoDialog" role="dialog" aria-modal="true">
+        <p id="annoDialogTitle" class="anno-title">注释</p>
+        <p id="annoDialogLoc" class="anno-loc"></p>
+        <div id="annoDialogQuote" class="anno-quote"></div>
+        <div id="annoDialogView" class="anno-view-text"></div>
+        <textarea id="annoDialogInput" placeholder="输入注释内容…"></textarea>
+        <div class="anno-actions">
+          <button id="annoDelete" type="button" class="danger spacer">删除</button>
+          <button id="annoCancel" type="button">关闭</button>
+          <button id="annoEdit" type="button">编辑</button>
+          <button id="annoSave" type="button" class="primary">保存</button>
+        </div>
+      </div>
+    </div>
     <div id="toolbar">
       <button id="btnOpen" title="Open file">Open</button>
       <span class="sep"></span>
@@ -25,7 +44,10 @@
       <span class="sep"></span>
       <button id="btnWidthDown" title="Narrower">&lt;</button>
       <button id="btnWidthUp" title="Wider">&gt;</button>
+      <span class="sep"></span>
+      <button id="btnExport" title="Export annotations">导出</button>
     </div>
+    <div id="toast" role="status" aria-live="polite"></div>
     <script src="./app.js"></script>
   </body>
 </html>

@@ -3,6 +3,21 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>debugging</string>
+    <string>app-store-connect</string>
+    <key>teamID</key>
+    <string>7A263NR2R8</string>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>signingCertificate</key>
+    <string>iOS Distribution</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.joycom.mdreader</key>
+        <string>MD Reader iOS App Store</string>
+    </dict>
+    <key>destination</key>
+    <string>export</string>
+    <key>uploadSymbols</key>
+    <true/>
 </dict>
 </plist>

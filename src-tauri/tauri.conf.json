@@ -31,6 +31,11 @@
     "category": "DeveloperTool",
     "shortDescription": "Markdown reader with terminal-match theme",
     "longDescription": "A minimal native macOS markdown reader rendering .md files with an opencode terminal-match theme.",
+    "macOS": {
+      "entitlements": "entitlements.mac.plist",
+      "hardenedRuntime": false,
+      "signingIdentity": "3rd Party Mac Developer Application: JOYCOM PTE. LTD. (7A263NR2R8)"
+    },
     "fileAssociations": [
       {
         "ext": ["md", "markdown", "mdown", "mkd"],
