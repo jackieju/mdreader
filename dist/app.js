@@ -660,7 +660,9 @@
   }
 
   function readZoom() {
-    const v = parseFloat(localStorage.getItem(ZOOM_KEY));
+    // Guard: localStorage may throw SecurityError under App Sandbox on first launch
+    let v = NaN;
+    try { v = parseFloat(localStorage.getItem(ZOOM_KEY)); } catch (_) {}
     return Number.isFinite(v) ? clampZoom(v) : 1.0;
   }
 
@@ -690,7 +692,9 @@
   }
 
   function readWidth() {
-    const v = parseFloat(localStorage.getItem(WIDTH_KEY));
+    // Guard: localStorage may throw SecurityError under App Sandbox on first launch
+    let v = NaN;
+    try { v = parseFloat(localStorage.getItem(WIDTH_KEY)); } catch (_) {}
     return Number.isFinite(v) ? clampWidth(v) : WIDTH_BASE;
   }
 

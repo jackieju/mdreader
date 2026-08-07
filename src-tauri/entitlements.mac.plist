@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Must match the provisioning profile's application-identifier for TestFlight -->
+	<key>com.apple.application-identifier</key>
+	<string>7A263NR2R8.com.joycom.mdreader</string>
+	<key>com.apple.developer.team-identifier</key>
+	<string>7A263NR2R8</string>
+	<!-- Mac App Store requires App Sandbox -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- REQUIRED for Tauri v2: WKWebView's networking process needs this to load the
+	     bundled local HTML via Tauri's custom scheme handler under App Sandbox.
+	     Without it the WebView renders a fully blank screen on a fresh reviewer machine
+	     (App Review Guideline 2.1). App makes NO external network requests. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- App reads .md files the user picks via the open dialog or "Open with" -->
+	<key>com.apple.security.files.user-selected.read-only</key>
+	<true/>
+</dict>
+</plist>

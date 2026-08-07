@@ -18,7 +18,6 @@
 *.mobileprovision
 *.provisionprofile
 /src-tauri/embedded.provisionprofile
-/src-tauri/entitlements.mac.plist
 
 # Local scratch / build artifacts
 /demo.md
