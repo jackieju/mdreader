@@ -14,6 +14,7 @@
     "core:app:default",
     "core:menu:default",
     "dialog:default",
-    "dialog:allow-open"
+    "dialog:allow-open",
+    "folder-picker:default"
   ]
 }

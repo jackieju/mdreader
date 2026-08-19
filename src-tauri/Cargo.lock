@@ -1683,11 +1683,14 @@ dependencies = [
 name = "mdreader"
 version = "0.1.0"
 dependencies = [
+ "base64 0.22.1",
+ "regex",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
  "tauri-plugin-dialog",
+ "tauri-plugin-folder-picker",
 ]
 
 [[package]]
@@ -3119,6 +3122,17 @@ dependencies = [
  "tauri-plugin-fs",
  "thiserror 2.0.19",
  "url",
+]
+
+[[package]]
+name = "tauri-plugin-folder-picker"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-plugin",
+ "thiserror 2.0.19",
 ]
 
 [[package]]

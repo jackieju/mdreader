@@ -1,0 +1,26 @@
+[package]
+name = "tauri-plugin-folder-picker"
+version = "0.1.0"
+edition = "2021"
+description = "iOS/desktop folder picker with security-scoped bookmark persistence for MD Reader"
+authors = ["mdreader"]
+# `links` is required by tauri-plugin's build helper so the mobile Swift/Kotlin
+# assets get associated with this crate's compilation unit.
+links = "tauri-plugin-folder-picker"
+
+[lib]
+name = "tauri_plugin_folder_picker"
+path = "src/lib.rs"
+
+[build-dependencies]
+tauri-plugin = { version = "2", features = ["build"] }
+
+[dependencies]
+tauri = { version = "2", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+# iOS links the WKWebView-backed runtime; match the dialog plugin's target dep.
+[target.'cfg(target_os = "ios")'.dependencies]
+tauri = { version = "2", features = ["wry"], default-features = false }

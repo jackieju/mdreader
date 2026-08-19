@@ -35,8 +35,19 @@
         </div>
       </div>
     </div>
+    <div id="vaultOverlay">
+      <div id="vaultPanel" role="dialog" aria-modal="true">
+        <div class="vault-header">
+          <span id="vaultTitle" class="vault-title">Markdown files</span>
+          <button id="vaultClose" type="button" class="vault-close">&times;</button>
+        </div>
+        <div id="vaultList" class="vault-list"></div>
+        <div id="vaultEmpty" class="vault-empty">No .md files in this folder.</div>
+      </div>
+    </div>
     <div id="toolbar">
       <button id="btnOpen" title="Open file">Open</button>
+      <button id="btnFolder" title="Open folder">Folder</button>
       <span class="sep"></span>
       <button id="btnZoomOut" title="Zoom out">A-</button>
       <button id="btnZoomIn" title="Zoom in">A+</button>

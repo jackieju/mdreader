@@ -4,6 +4,10 @@
 # Tauri generated schemas (regenerated on build)
 /src-tauri/gen/schemas/
 
+# Tauri auto-generated vendored Swift SDK + SwiftPM lockfiles (regenerated on build)
+/tauri-plugin-folder-picker/.tauri/
+/tauri-plugin-folder-picker/ios/Package.resolved
+
 # macOS
 .DS_Store
 

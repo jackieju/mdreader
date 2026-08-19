@@ -178,7 +178,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		"TEMP_C8C3FFDC-5BB9-4036-AFA1-8FC00C984F3B" /* x86_64 */ = {
+		"TEMP_91EDE317-E09D-416E-9F5E-51CB112FFC3F" /* x86_64 */ = {
 			isa = PBXGroup;
 			children = (
 			);

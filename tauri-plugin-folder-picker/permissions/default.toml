@@ -1,0 +1,5 @@
+"$schema" = "schemas/schema.json"
+
+[default]
+description = "Allows picking a folder and resolving a saved folder bookmark."
+permissions = ["allow-pick-folder", "allow-resolve-folder-bookmark"]

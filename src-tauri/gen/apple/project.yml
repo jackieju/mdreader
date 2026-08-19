@@ -57,8 +57,8 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        CFBundleShortVersionString: 0.1.0
-        CFBundleVersion: "0.1.0"
+        CFBundleShortVersionString: 1.0.1
+        CFBundleVersion: "1.0.1"
         # Both MUST stay false: true hands us security-scoped URLs std::fs cannot
         # read; false makes iOS copy the file into our sandbox as a readable path.
         LSSupportsOpeningDocumentsInPlace: false

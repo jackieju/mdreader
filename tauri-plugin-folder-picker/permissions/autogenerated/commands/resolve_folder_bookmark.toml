@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-resolve-folder-bookmark"
+description = "Enables the resolve_folder_bookmark command without any pre-configured scope."
+commands.allow = ["resolve_folder_bookmark"]
+
+[[permission]]
+identifier = "deny-resolve-folder-bookmark"
+description = "Denies the resolve_folder_bookmark command without any pre-configured scope."
+commands.deny = ["resolve_folder_bookmark"]

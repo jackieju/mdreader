@@ -121,7 +121,7 @@
   async function loadPath(path) {
     if (!path) return;
     try {
-      const content = await window.__TAURI__.core.invoke("read_md", { path });
+      const content = await window.__TAURI__.core.invoke("read_md_with_assets", { path });
       render(path, content);
     } catch (e) {
       showError(String(e));
@@ -644,6 +644,8 @@
       .then((paths) => {
         if (Array.isArray(paths) && paths.length > 0) {
           loadPath(paths[0]);
+        } else {
+          restoreVault();
         }
       })
       .catch(() => {});
@@ -770,18 +772,105 @@
     }
   }
 
+  const VAULT_KEY = "mdreader.vault.bookmark";
+
+  function readVaultBookmark() {
+    try { return localStorage.getItem(VAULT_KEY) || ""; } catch (_) { return ""; }
+  }
+
+  function saveVaultBookmark(b) {
+    try { localStorage.setItem(VAULT_KEY, b || ""); } catch (_) {}
+  }
+
+  function showVault(dir, entries) {
+    const overlay = document.getElementById("vaultOverlay");
+    const panel = document.getElementById("vaultPanel");
+    const list = document.getElementById("vaultList");
+    const title = document.getElementById("vaultTitle");
+    if (!overlay || !panel || !list) return;
+    title.textContent = dir ? dir.split("/").filter(Boolean).pop() || dir : "Markdown files";
+    list.textContent = "";
+    (entries || []).forEach((entry) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "vault-item";
+      btn.textContent = entry.name;
+      btn.addEventListener("click", () => {
+        overlay.classList.remove("visible");
+        loadPath(entry.path);
+      });
+      list.appendChild(btn);
+    });
+    panel.classList.toggle("empty", !entries || entries.length === 0);
+    overlay.classList.add("visible");
+  }
+
+  async function listAndShow(dir) {
+    try {
+      const entries = await window.__TAURI__.core.invoke("list_markdown_in_dir", { dir });
+      showVault(dir, entries);
+    } catch (e) {
+      showError(String(e));
+    }
+  }
+
+  async function openFolder() {
+    if (!isMobile()) {
+      const dialog = window.__TAURI__ && window.__TAURI__.dialog;
+      if (!dialog || !dialog.open) {
+        showError("Folder picker unavailable.");
+        return;
+      }
+      try {
+        const selected = await dialog.open({ directory: true, multiple: false });
+        const dir = Array.isArray(selected) ? selected[0] : selected;
+        if (dir) listAndShow(dir);
+      } catch (e) {
+        showError(String(e));
+      }
+      return;
+    }
+    try {
+      const res = await window.__TAURI__.core.invoke("plugin:folder-picker|pick_folder");
+      if (!res || !res.path) return;
+      if (res.bookmark) saveVaultBookmark(res.bookmark);
+      listAndShow(res.path);
+    } catch (e) {
+      showError(String(e));
+    }
+  }
+
+  async function restoreVault() {
+    if (!isMobile()) return;
+    const bookmark = readVaultBookmark();
+    if (!bookmark) return;
+    try {
+      const res = await window.__TAURI__.core.invoke("plugin:folder-picker|resolve_folder_bookmark", { bookmark });
+      if (res && res.path) listAndShow(res.path);
+    } catch (_) {}
+  }
+
   function bind(id, fn) {
     const el = document.getElementById(id);
     if (el) el.addEventListener("click", fn);
   }
 
   bind("btnOpen", pickAndOpen);
+  bind("btnFolder", openFolder);
   bind("btnZoomOut", () => setZoom(zoom - ZOOM_STEP));
   bind("btnZoomIn", () => setZoom(zoom + ZOOM_STEP));
   bind("btnZoomReset", () => setZoom(1.0));
   bind("btnWidthDown", () => setWidth(width - WIDTH_STEP));
   bind("btnWidthUp", () => setWidth(width + WIDTH_STEP));
   bind("btnExport", doExport);
+
+  const vaultClose = document.getElementById("vaultClose");
+  if (vaultClose) {
+    vaultClose.addEventListener("click", () => {
+      const overlay = document.getElementById("vaultOverlay");
+      if (overlay) overlay.classList.remove("visible");
+    });
+  }
 
   wireAnnotationUi();
 
