@@ -18,6 +18,39 @@
 
 * { box-sizing: border-box; }
 
+#minimap {
+  position: fixed;
+  left: env(safe-area-inset-left, 0px);
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  z-index: 9000;
+  background: rgba(45, 45, 45, 0.08);
+  border-right: 1px solid rgba(45, 45, 45, 0.12);
+  display: none;
+  pointer-events: none;
+}
+
+#minimap.visible { display: block; }
+
+#minimap .minimap-dot {
+  position: absolute;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: #d31027;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#minimap .minimap-dot:active { transform: scale(1.4); }
+
 html {
   font-size: 14px;
 }
@@ -36,7 +69,8 @@ body {
 
 #page {
   min-height: 100vh;
-  padding: 24px 32px;
+  /* bottom padding keeps the last line clear of the fixed toolbar */
+  padding: 24px 32px calc(env(safe-area-inset-bottom, 0px) + 96px);
   display: flex;
   justify-content: center;
 }
@@ -261,6 +295,15 @@ body {
 .anno-dot::before { content: "\25CF"; } /* ● */
 
 .anno-dot:active { opacity: 0.6; }
+
+.anno-dot.flash {
+  animation: anno-flash 1.2s ease-out;
+}
+
+@keyframes anno-flash {
+  0%, 100% { background: transparent; }
+  30% { background: rgba(255, 202, 118, 0.9); }
+}
 
 #annoMenu {
   position: fixed;

@@ -96,6 +96,9 @@
     }
     restoreAnnotations();
     window.scrollTo(0, 0);
+    contentEl.querySelectorAll("img").forEach((img) => {
+      if (!img.complete) img.addEventListener("load", scheduleMinimap, { once: true });
+    });
   }
 
   function showError(msg) {
@@ -291,7 +294,62 @@
   function restoreAnnotations() {
     annotations = annoLoad(currentDoc.path);
     for (const a of annotations) insertDot(a);
+    updateMinimap();
   }
+
+  const minimapEl = document.getElementById("minimap");
+
+  function docScrollHeight() {
+    return Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight,
+      window.innerHeight
+    );
+  }
+
+  function scrollToAnno(id) {
+    const dot = contentEl.querySelector(`.anno-dot[data-anno-id="${id}"]`);
+    if (!dot) return;
+    const rect = dot.getBoundingClientRect();
+    const y = rect.top + window.scrollY - window.innerHeight * 0.3;
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+    dot.classList.add("flash");
+    setTimeout(() => dot.classList.remove("flash"), 1200);
+  }
+
+  function updateMinimap() {
+    if (!minimapEl) return;
+    minimapEl.textContent = "";
+    if (!annotations.length) {
+      minimapEl.classList.remove("visible");
+      return;
+    }
+    const total = docScrollHeight();
+    const trackH = minimapEl.clientHeight || window.innerHeight;
+    for (const a of annotations) {
+      const dotInDoc = contentEl.querySelector(`.anno-dot[data-anno-id="${a.id}"]`);
+      if (!dotInDoc) continue;
+      const docY = dotInDoc.getBoundingClientRect().top + window.scrollY;
+      const ratio = Math.max(0, Math.min(1, docY / total));
+      const mark = document.createElement("div");
+      mark.className = "minimap-dot";
+      mark.style.top = ratio * trackH + "px";
+      mark.title = a.text || "";
+      mark.addEventListener("click", () => scrollToAnno(a.id));
+      minimapEl.appendChild(mark);
+    }
+    minimapEl.classList.add("visible");
+  }
+
+  let minimapRaf = null;
+  function scheduleMinimap() {
+    if (minimapRaf) return;
+    minimapRaf = requestAnimationFrame(() => {
+      minimapRaf = null;
+      updateMinimap();
+    });
+  }
+  window.addEventListener("resize", scheduleMinimap);
 
   let pendingRange = null;
   let pendingPos = null;
@@ -390,6 +448,7 @@
       annotations.push(a);
       annoPersist();
       insertDot(a);
+      updateMinimap();
     } else if (dlgMode === "edit" && currentAnnoId) {
       const a = annoById(currentAnnoId);
       if (a) {
@@ -411,6 +470,7 @@
     const dot = contentEl.querySelector(`.anno-dot[data-anno-id="${currentAnnoId}"]`);
     if (dot && dot.parentNode) dot.parentNode.removeChild(dot);
     hideDialog();
+    updateMinimap();
   }
 
   function caretRangeAt(x, y) {
@@ -681,6 +741,7 @@
 
   function setZoom(next) {
     zoom = applyZoom(next);
+    scheduleMinimap();
   }
 
   const WIDTH_KEY = "mdreader.width";
@@ -713,6 +774,7 @@
 
   function setWidth(next) {
     width = applyWidth(next);
+    scheduleMinimap();
   }
 
   window.addEventListener("keydown", (e) => {
